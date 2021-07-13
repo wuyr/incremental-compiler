@@ -1,2 +1,1 @@
-# incremental-compiler
-Gradle插件，用于增量编译class和生成增量dex
+### 各Gradle版本兼容性测试中。。。
