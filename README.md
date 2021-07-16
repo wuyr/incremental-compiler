@@ -43,6 +43,9 @@ Compile编译完成后，把这些参与编译的文件记录到*assembleDebug*�
 <br/>
 
 ### 效果演示：
+随意改动不同module的几个文件：
+![preview](https://github.com/wuyr/incremental-compiler/raw/main/previews/0.png)
+
 通过*generateIncrementalDex*来生成增量dex：
 
 ![preview](https://github.com/wuyr/incremental-compiler/raw/main/previews/1.png)
