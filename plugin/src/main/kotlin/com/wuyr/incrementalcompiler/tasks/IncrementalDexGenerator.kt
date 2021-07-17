@@ -17,6 +17,9 @@ open class IncrementalDexGenerator : DefaultTask() {
         const val TASK_NAME = "generateIncrementalDex"
     }
 
+    /**
+     * 生成增量dex
+     */
     fun generate(compiler: IncrementalCompiler): String? {
         val compiledFiles = compiler.compileKotlin() + compiler.compileJava()
         if (compiledFiles.isEmpty()) return null
@@ -33,9 +36,20 @@ open class IncrementalDexGenerator : DefaultTask() {
         return null
     }
 
+    /**
+     * 合并dex
+     * @param dexName dex名称
+     * @param finalDexPaths 需要进行合并的dex路径
+     */
     fun mergeDex(dexName: String, finalDexPaths: List<String>) =
         makeDexByD8("${project.rootProject.buildDir}/outputs/merged_incremental_dex", dexName, finalDexPaths)
 
+    /**
+     * 生成dex文件
+     * @param destinationDir 输出路径
+     * @param dexName dex名称
+     * @param inputFiles 目标文件
+     */
     private fun makeDexByD8(destinationDir: String, dexName: String, inputFiles: List<String>): Boolean {
         val dexOutputDir = File(destinationDir).apply { mkdirs() }
         val d8Command = StringBuilder("${project.sdkDirectory}/build-tools/${project.buildToolsVersion}/d8")

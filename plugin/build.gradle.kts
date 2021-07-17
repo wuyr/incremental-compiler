@@ -1,6 +1,7 @@
 plugins {
     `java-gradle-plugin`
     id("org.jetbrains.kotlin.jvm") version "1.4.0"
+    id("org.jetbrains.dokka") version "1.5.0"
     id("com.gradle.plugin-publish") version "0.15.0"
 }
 
@@ -13,7 +14,7 @@ dependencies {
 
 val githubAddress = "https://github.com/wuyr/incremental-compiler"
 val pluginName = "incrementalcompiler"
-val pluginId = "com.wuyr.incrementalcompiler"
+val pluginId = "com.github.wuyr.incrementalcompiler"
 group = pluginId
 version = "1.0.0"
 
@@ -28,20 +29,36 @@ gradlePlugin {
 }
 
 pluginBundle {
+    mavenCoordinates {
+        artifactId = "plugin"
+        groupId = pluginId
+        version = version
+    }
     website = githubAddress
     vcsUrl = githubAddress
-    description = "A Gradle plugin for Android project, used to incrementally compile class and generate incremental DEX, much faster than the [assembleDebug] task."
+    description =
+        "A Gradle plugin for Android project, used to incrementally compile class and generate incremental DEX, much faster than the [assembleDebug] task."
     tags = listOf("incremental", "compile", "dex")
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
+val dokkaHtml by tasks.getting(org.jetbrains.dokka.gradle.DokkaTask::class)
+
+val javadocJar: TaskProvider<Jar> by tasks.registering(Jar::class) {
+    dependsOn(dokkaHtml)
+    archiveClassifier.set("javadoc")
+    from(dokkaHtml.outputDirectory)
 }
 
-tasks.javadoc {
-    if (JavaVersion.current().isJava9Compatible) {
-        (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
+tasks {
+    val sourcesJar by creating(Jar::class) {
+        dependsOn(JavaPlugin.CLASSES_TASK_NAME)
+        archiveClassifier.convention("sources")
+        archiveClassifier.set("sources")
+        from(sourceSets["main"].allSource)
+    }
+    artifacts {
+        add("archives", sourcesJar)
+        add("archives", javadocJar)
     }
 }
 

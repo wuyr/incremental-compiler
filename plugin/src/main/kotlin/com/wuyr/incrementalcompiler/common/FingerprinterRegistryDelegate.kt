@@ -62,6 +62,9 @@ class FingerprinterRegistryDelegate private constructor(private val fingerprinte
         private val InputFilePropertySpec.properties: FileCollection get() = getPropertyFilesMethod.invoke(this) as FileCollection
     }
 
+    /**
+     *  计算文件指纹
+     */
     fun fingerprint(spec: InputFilePropertySpec) =
         // method getFingerprinter params changes begin at 6.8.0
         (if (LARGER_THAN_6_7_1) {

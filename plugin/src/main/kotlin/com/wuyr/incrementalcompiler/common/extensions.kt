@@ -43,6 +43,9 @@ val Project.sdkDirectory: String
         extension::class.invoke<File>(extension, "getSdkDirectory")!!.absolutePath
     }
 
+/**
+ * 判断版本号是否 > 目标版本
+ */
 infix fun String.largerThan(target: String): Boolean {
     //对比索引记录
     var originCompareCursor = 0

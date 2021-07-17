@@ -46,6 +46,9 @@ open class IncrementalCompiler : DefaultTask() {
         private const val COMPILE_JAVA_TASK = "compileDebugJavaWithJavac"
     }
 
+    /**
+     * 是否需要生成R文件
+     */
     @get: Internal
     open val rFileNeeded: Boolean
         get() = (project as ProjectInternal).run {
@@ -61,9 +64,15 @@ open class IncrementalCompiler : DefaultTask() {
                 .filter { it.name == "R.jar" }.any { !it.exists() }
         }
 
+    /**
+     * 是否需要生成BuildConfig
+     */
     private val buildConfigNeeded: Boolean
         get() = (project as ProjectInternal).run { !File(buildDir, "generated/source/buildConfig/debug").exists() }
 
+    /**
+     * 编译Kotlin源码
+     */
     fun compileKotlin(): List<String> {
         if (buildConfigNeeded) {
             generateBuildConfig()
@@ -99,6 +108,9 @@ open class IncrementalCompiler : DefaultTask() {
         return compiledFiles
     }
 
+    /**
+     * 编译Java源码
+     */
     fun compileJava(): List<String> {
         if (buildConfigNeeded) {
             generateBuildConfig()
@@ -163,6 +175,9 @@ open class IncrementalCompiler : DefaultTask() {
         }
     }
 
+    /**
+     * 更新本次编译记录
+     */
     private fun Map<String, FileCollectionFingerprint>.saveCompileRecords(taskName: String) {
         val storeKey = ":${project.name}:$taskName"
         val defaultExecutionHistoryStore = (project as ProjectInternal).services.get(ExecutionHistoryStore::class.java)
@@ -189,6 +204,9 @@ open class IncrementalCompiler : DefaultTask() {
 
     private fun AbstractCompile.computeKotlinChanges() = computeChanges(COMPILE_KOTLIN_TASK)
 
+    /**
+     * 根据文件指纹计算有变更的文件
+     */
     private fun AbstractCompile.computeChanges(taskName: String): Pair<InputChangesInternal, Map<String, FileCollectionFingerprint>> {
         val target = project as ProjectInternal
         var optional = target.services.get(ExecutionHistoryStore::class.java).load(":${project.name}:$taskName")
