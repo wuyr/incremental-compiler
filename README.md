@@ -60,38 +60,47 @@ Compile编译完成后，把这些参与编译的文件记录到*assembleDebug*�
 
 <br/>
 
-### 使用方式（插件等待审核中）：
-#### 1. 添加插件依赖：
-在项目下的`build.gradle`（注意不是`module/build.gradle`，是**项目根目录**下的`build.gradle`哦），像这样：
+### 使用方式：
+#### 新版Gradle：
+```groovy
+plugins {
+    ...
+    id "com.github.wuyr.incrementalcompiler" version "1.0.0"
+}
+```
+#### 旧版Gradle：
+在项目下的`build.gradle`（注意不是`module/build.gradle`，是**项目根目录**下的`build.gradle`哦）加上maven地址和classpath，像这样：
 ```groovy
 buildscript {
     ...
+    repositories {
+        ...
+        maven { url "https://plugins.gradle.org/m2/" }    
+    }
+
     dependencies {
         ...
-        classpath "com.wuyr.incrementalcompiler:plugin:1.0.0"
+        classpath "com.github.wuyr.incrementalcompiler:plugin:1.0.0"
     }
 }
 ```
 
+>如果上面的`plugins.gradle.org/m2`访问速度很慢，也可以换成国内的镜像地址，比如阿里云的：<br/>maven { url 'https://maven.aliyun.com/nexus/content/repositories/gradle-plugin' }
+
+然后在目标module里加上：
+```groovy
+apply plugin: "com.github.wuyr.incrementalcompiler"
+```
+即可。
+
 <br/>
 
-#### 2. 在合适的地方应用插件：
+#### 应用到所有module：
 如果想为项目中所有module应用的话，可以在项目下的`build.gradle`（注意不是`module/build.gradle`，是**项目根目录**下的`build.gradle`哦）中直接遍历所有module，像这样：
 ```groovy
 subprojects {
     apply plugin: 'com.wuyr.incrementalcompiler'
 }
-```
-只想为单个module应用，可直接在对应的`build.gradle`里apply即可：
-```groovy
-plugins {
-    ...
-    id 'com.wuyr.incrementalcompiler'
-}
-```
-老版本的Gradle：
-```groovy
-apply plugin: 'com.wuyr.incrementalcompiler'
 ```
 
 <br/>
