@@ -48,6 +48,8 @@ Compile编译完成后，把这些参与编译的文件记录到*assembleDebug*�
 
 通过*generateIncrementalDex*来生成增量dex：
 
+![preview](https://github.com/wuyr/incremental-compiler/raw/main/previews/5.png)
+
 ![preview](https://github.com/wuyr/incremental-compiler/raw/main/previews/1.png)
 
 执行生成后，在`project/build/outputs/merged_incremental_dex`目录下会生成`classes.dex`：
