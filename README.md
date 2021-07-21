@@ -101,7 +101,7 @@ apply plugin: "com.github.wuyr.incrementalcompiler"
 如果想为项目中所有module应用的话，可以在项目下的`build.gradle`（注意不是`module/build.gradle`，是**项目根目录**下的`build.gradle`哦）中直接遍历所有module，像这样：
 ```groovy
 subprojects {
-    apply plugin: 'com.wuyr.incrementalcompiler'
+    apply plugin: 'com.github.wuyr.incrementalcompiler'
 }
 ```
 
