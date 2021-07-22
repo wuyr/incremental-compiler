@@ -52,7 +52,7 @@ Compile编译完成后，把这些参与编译的文件记录到*assembleDebug*�
 
 ![preview](https://github.com/wuyr/incremental-compiler/raw/main/previews/1.png)
 
-执行生成后，在`project/build/outputs/merged_incremental_dex`目录下会生成`classes.dex`：
+Task执行完毕后，在`project/build/outputs/merged_incremental_dex`目录下会生成`classes.dex`：
 
 ![preview](https://github.com/wuyr/incremental-compiler/raw/main/previews/2.png)
 

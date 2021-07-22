@@ -52,16 +52,16 @@ open class IncrementalCompiler : DefaultTask() {
     @get: Internal
     open val rFileNeeded: Boolean
         get() = (project as ProjectInternal).run {
-            // no local kotlin files compile records and the kotlin source code not empty
-            (!services.get(ExecutionHistoryStore::class.java).load(":$name:$COMPILE_KOTLIN_TASK").isPresent
+            // R file does not exist
+            (((tasks.findByName(COMPILE_KOTLIN_TASK) as? AbstractCompile)?.classpath?.files ?: emptySet<File>())
+                    + ((tasks.findByName(COMPILE_JAVA_TASK) as? AbstractCompile)?.classpath?.files ?: emptySet<File>()))
+                .filter { it.name == "R.jar" }.any { !it.exists() }
+                    // no local kotlin files compile records and the kotlin source code not empty
+                    || (!services.get(ExecutionHistoryStore::class.java).load(":$name:$COMPILE_KOTLIN_TASK").isPresent
                     && (tasks.findByName(COMPILE_KOTLIN_TASK) as? AbstractCompile)?.source?.any { it.name.endsWith(".kt") } ?: false)
                     // no local java files compile records and the java source code not empty
                     || (!services.get(ExecutionHistoryStore::class.java).load(":$name:$COMPILE_JAVA_TASK").isPresent
                     && (tasks.findByName(COMPILE_JAVA_TASK) as? AbstractCompile)?.source?.any { it.name.endsWith(".java") } ?: false)
-                    // R file does not exist
-                    || (((tasks.findByName(COMPILE_KOTLIN_TASK) as? AbstractCompile)?.classpath?.files ?: emptySet<File>())
-                    + ((tasks.findByName(COMPILE_JAVA_TASK) as? AbstractCompile)?.classpath?.files ?: emptySet<File>()))
-                .filter { it.name == "R.jar" }.any { !it.exists() }
         }
 
     /**

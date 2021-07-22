@@ -22,7 +22,6 @@ open class IncrementalDexGenerator : DefaultTask() {
      */
     fun generate(compiler: IncrementalCompiler): String? {
         val compiledFiles = compiler.compileKotlin() + compiler.compileJava()
-        if (compiledFiles.isEmpty()) return null
         if (compiledFiles.isNotEmpty()) {
             "Files involved in this compilation:\n${compiledFiles.joinToString("\n")}".println()
             val dexOutputDir = "${project.buildDir}/outputs/incremental_dex"
